@@ -1,36 +1,61 @@
-<script setup>
-  import { onMounted, reactive, ref} from 'vue';
-  import ListCharacters from '../components/ListCharacters.vue';
+<template>
+  <div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th style="width: 22%;">Nome Produto</th>
+          <th style="width: 22%;">Preço</th>
+          <th>Quantidade</th>
+          <th>Categoria</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="product in products" :key="product.id">
+          <td>{{ product.id }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.quantity }}</td>
+          <td>{{ product.category }}</td>
+          <td>
+            <EditeButton />
+            <DeleteButton />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
 
-  let character = reactive(ref());
-  
-  onMounted(() => {
-    fetch("https://rickandmortyapi.com/api/character")
-    .then(response => response.json())
-    .then(response => {
-      character.value = response.results
-      console.log(character.value)
-    })
-  })
+<script>
+import DeleteButton from '../components/DeleteButton.vue';
+import EditeButton from '../components/EditButton.vue';
 
+export default {
+  name: 'ProductTable',
+  components: {
+    DeleteButton,
+    EditeButton
+  },
+  data() {
+    return {
+      products: [
+        { id: 1, name: 'Sansung Galaxy S23', price: '4300,00', quantity: 10, category: 'Eletronicos' },
+        { id: 2, name: 'Notebook Acer Nitro 5', price: '6000,00', quantity: 15, category: 'Eletronicos' },
+        { id: 3, name: 'Sofá', price: '900,00', quantity: 5, category: 'Móveis' },
+        { id: 4, name: 'Geladeira', price: '6500,00', quantity: 6, category: 'Eletrodomésticos' },
+        { id: 5, name: 'Cadeira', price: '500,00', quantity: 2, category: 'Móveis' }
+      ]
+    };
+  }
+};
 </script>
 
-<template>
-  <main class="container">
-    <div class="row">
-      <div v-for="(character, index) in character" :key="index" class="col-md-4 mb-3">
-        <div class="card">
-          <img :src="character.image" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h2 class="card-title">{{ character.name }}</h2>
-            <h4>Status: {{ character.status }}</h4>
-            <h4>Espécie: {{ character.species }}</h4>
-            <h4>Gênero: {{ character.gender }}</h4>
-            <h4>Localização: {{ character.location.name }}</h4>
-            <h4>Número de episódios: {{ character.episode.length }}</h4>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-</template>
+<style scoped>
+  .container {
+    margin-top: 60px;
+    padding-left: 20px;
+  }
+</style>
+ 
